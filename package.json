@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node-dev index.ts"
+    "dev": "ts-node-dev index.ts",
+    "temp-database-up": "docker-compose up -d",
+    "temp-database-down": "docker-compose down",
+    "temp-database-migrate": "npx prisma migrate dev"
   },
   "keywords": [],
   "author": "",
@@ -22,8 +25,10 @@
     "typescript": "^5.1.6"
   },
   "dependencies": {
+    "@prisma/client": "^5.0.0",
     "dotenv": "^16.0.3",
     "nodemon": "^2.0.22",
+    "prisma": "^5.0.0",
     "ts-node": "^10.9.1"
   }
 }

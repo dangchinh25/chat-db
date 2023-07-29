@@ -3,8 +3,16 @@ import { OpenAI } from 'langchain/llms/openai';
 import { SqlDatabase } from 'langchain/sql_db';
 import { createSqlAgent, SqlToolkit } from 'langchain/agents/toolkits/sql';
 import { DataSource } from 'typeorm';
+import express from 'express';
+import cors from 'cors';
 
-const main = async () => {
+export const app = express();
+app.use( express.json() );
+app.use( cors() );
+
+app.post( '/instructions', async ( req, res ) => {
+    const { instructions } = req.body;
+
     const appDataSource = new DataSource( {
         type: 'postgres',
         host: env.POSTGRES_HOST,
@@ -30,11 +38,9 @@ const main = async () => {
     const toolkit = new SqlToolkit( db, model );
     const executor = createSqlAgent( model, toolkit );
 
-    const input = 'Describe the playlisttrack table';
+    console.log( `Executing with input "${ instructions }"...` );
 
-    console.log( `Executing with input "${ input }"...` );
-
-    const result = await executor.call( { input } );
+    const result = await executor.call( { input: instructions } );
 
     console.log( `Got output ${ result.output }` );
 
@@ -45,6 +51,10 @@ const main = async () => {
             2
         ) }`
     );
-};
 
-main().then();
+    return res.status( 200 ).json( { output: result.output } );
+} );
+
+app.listen( env.PORT, () => {
+    console.log( `Server running on port ${ env.PORT }` );
+} );

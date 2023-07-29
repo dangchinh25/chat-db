@@ -20,8 +20,8 @@ const Home: React.FC = ()=> {
         event.preventDefault();
 
         try {
-            const response = await axios.post( 'http://localhost:4000', { input: inputValue } );
-            setResponse( { data: response.data } );
+            const response = await axios.post( 'http://localhost:4000/instructions', { instructions: inputValue } );
+            setResponse( { data: response.data.output } );
         } catch ( error ) {
             setResponse( { error: 'An error occurred while making the request.', data: error } );
         }

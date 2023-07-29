@@ -2,12 +2,14 @@
 import dotenv from 'dotenv';
 import {
     cleanEnv,
-    str
+    str,
+    num
 } from 'envalid';
 
 dotenv.config( { path: '.env' } );
 
 export const env = cleanEnv( process.env, {
+    PORT: num( { default: 4000 } ),
     DATABASE_URL: str( { default: undefined } ),
     POSTGRES_USER: str(),
     POSTGRES_PASSWORD: str(),
